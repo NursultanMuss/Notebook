@@ -1,18 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context="com.example.notebook.MainActivity">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Welcome"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
+
+
+        <Button
+            android:id="@+id/change_password_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/colorPrimary"
+            android:text="Change Password"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/change_email_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/colorPrimary"
+            android:text="Change Email"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/delete_user_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/colorPrimary"
+            android:text="Delete User"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/colorPrimary"
+            android:text="Sign Out"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_action_add"
+        android:elevation="6dp"
+        android:id="@+id/fab_plus"
+        app:pressedTranslationZ="12dp"
+        android:backgroundTint="@color/fab_color"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/ic_action_note"
+        android:elevation="6dp"
+        android:id="@+id/fab_note"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/fab_color"
+        />
+    <android.support.design.widget.FloatingActionButton
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_gravity="bottom|end"
+    android:layout_marginRight="@dimen/fab_margin_right"
+    android:layout_marginBottom="170dp"
+    android:src="@drawable/ic_action_task"
+    android:elevation="6dp"
+    android:id="@+id/fab_task"
+    app:pressedTranslationZ="12dp"
+    app:backgroundTint="@color/fab_color"
+    />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginBottom="240dp"
+        android:src="@drawable/ic_action_aim"
+        android:elevation="6dp"
+        android:id="@+id/fab_aim"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/fab_color"
+        />
 
-</android.support.constraint.ConstraintLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
