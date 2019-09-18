@@ -4,8 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import com.github.clans.fab.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,11 +21,21 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     ProgressDialog PD;
 
+    FloatingActionButton fab_plus, fab_note, fab_task, fab_aim;
+    Animation FabOpen, FabClose, ChgBtn;
+    boolean isOpen = false;
+
 
 
     @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
+        fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
+        fab_note = (FloatingActionButton) findViewById(R.id.fab_note);
+        fab_task = (FloatingActionButton) findViewById(R.id.fab_task);
+
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -76,5 +89,19 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         super.onResume();
+    }
+
+    protected void ClickMakeNote(View v){
+        Intent intent = new Intent(MainActivity.this,MakeNoteActivity.class);
+        startActivity(intent);
+    }
+
+    protected void ClickMakeTask(View v){
+        Intent intent = new Intent(MainActivity.this, MakeTaskActivity.class);
+        startActivity(intent);
+    }
+    protected void ClickMakeAim(View v){
+        Intent intent = new Intent(MainActivity.this,MakeAimActivity.class);
+        startActivity(intent);
     }
 }
