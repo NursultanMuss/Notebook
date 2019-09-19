@@ -91,16 +91,16 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    protected void ClickMakeNote(View v){
+    public void ClickMakeNote(View v){
         Intent intent = new Intent(MainActivity.this,MakeNoteActivity.class);
         startActivity(intent);
     }
 
-    protected void ClickMakeTask(View v){
+    public void ClickMakeTask(View v){
         Intent intent = new Intent(MainActivity.this, MakeTaskActivity.class);
         startActivity(intent);
     }
-    protected void ClickMakeAim(View v){
+    public void ClickMakeAim(View v){
         Intent intent = new Intent(MainActivity.this,MakeAimActivity.class);
         startActivity(intent);
     }
