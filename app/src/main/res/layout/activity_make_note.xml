@@ -6,6 +6,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MakeNoteActivity">
+    <include
+        android:id="@+id/toolbarNote"
+        layout="@layout/my_toolbar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:background="#474646">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="@string/headline_note"
+            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_notebook" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="3"
+                    android:text="asdasdasda"
+                    android:textSize="14dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:src="@drawable/ic_alarm_on" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:src="@drawable/ic_info" />
+
+            </LinearLayout>
+    </LinearLayout>
+
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_edit"
         android:layout_width="wrap_content"

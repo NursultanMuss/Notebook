@@ -3,4 +3,5 @@
     <string name="note_ru">Текстовая заметка</string>
     <string name="task_ru">Задача</string>
     <string name="aim_ru">Цель</string>
+    <string name="headline_note">Заголовок заметки</string>
 </resources>
