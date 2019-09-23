@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,11 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override            public void onClick(View view) {
+
                 auth.signOut();
                 FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
                     @Override
                     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
                         if (user == null) {
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             finish();
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     public void ClickMakeNote(View v){
         Intent intent = new Intent(MainActivity.this,MakeNoteActivity.class);
         startActivity(intent);
+        Toast.makeText(this, "yoyo", Toast.LENGTH_SHORT).show();
     }
 
     public void ClickMakeTask(View v){

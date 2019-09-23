@@ -13,7 +13,12 @@
         android:background="#474646">
         <include
             android:id="@+id/new_note_toolbar"
-            layout="@layout/my_toolbar" />
+            layout="@layout/my_toolbar"
+            android:visibility="visible"/>
+        <include
+            android:id="@+id/edit_note_toolbar"
+            layout="@layout/edit_toolbar"
+            android:visibility="gone"/>
         <EditText
             android:id="@+id/new_note_title"
             android:layout_width="match_parent"
@@ -83,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:onClick="clickEditText"
         android:layout_marginRight="@dimen/fab_margin_right"
         android:layout_marginBottom="50dp"
         android:src="@drawable/ic_edit"
@@ -92,6 +98,6 @@
         fab:fab_colorRipple="#C20024"
         fab:fab_shadowColor="#000"
         fab:fab_elevationCompat="6dp"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 </android.support.design.widget.CoordinatorLayout>
