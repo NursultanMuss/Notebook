@@ -6,19 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MakeNoteActivity">
-    <include
-        android:id="@+id/toolbarNote"
-        layout="@layout/my_toolbar" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:background="#474646">
+        <include
+            android:id="@+id/new_note_toolbar"
+            layout="@layout/my_toolbar" />
         <EditText
+            android:id="@+id/new_note_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:background="@android:color/transparent"
             android:hint="@string/headline_note"
             />
             <LinearLayout
@@ -45,14 +46,16 @@
                     android:textSize="14dp" />
 
                 <ImageButton
+                    android:id="@+id/make_reminder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:background="@null"
+                    android:background="@drawable/make_reminder"
                     android:gravity="end"
                     android:src="@drawable/ic_alarm_on" />
 
                 <ImageButton
+                    android:id="@+id/info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
@@ -60,7 +63,19 @@
                     android:gravity="end"
                     android:src="@drawable/ic_info" />
 
+
             </LinearLayout>
+        <EditText
+            android:id="@+id/new_note_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:gravity="top"/>
+
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionButton
