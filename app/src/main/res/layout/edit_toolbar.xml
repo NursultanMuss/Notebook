@@ -15,6 +15,7 @@
         android:layout_gravity="start|center_vertical"
         android:gravity="start"
         android:background="@null"
+        android:onClick="clickDone"
         android:src="@drawable/ic_action_done" />
 
     <ImageButton

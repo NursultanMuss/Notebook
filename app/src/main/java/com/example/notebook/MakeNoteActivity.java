@@ -1,5 +1,7 @@
 package com.example.notebook;
 
+import android.animation.Animator;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -89,27 +92,186 @@ public class MakeNoteActivity extends AppCompatActivity {
 //        });
     }
 
-    public void clickEditText(View view){
-//        final Animation fabHide = AnimationUtils.loadAnimation(view.getContext(),R.anim.fab_scale_down);
+    public void clickEditText(final View view){
+        final Animation fabHide = AnimationUtils.loadAnimation(view.getContext(),R.anim.fab_scale_down);
         Log.d("edit","editted");
-        Toast.makeText(view.getContext(), "Edit", Toast.LENGTH_SHORT).show();
-//        if(!isClicked){
-//            isClicked=true;
-//            fab_edit.startAnimation(fabHide);
-//            new_note_content.requestFocus();
-//            toolbar.setVisibility(View.GONE);
-//            edit_toolbar.setVisibility(View.VISIBLE);
-//            Log.d("edit","editted in");
-//            Toast.makeText(MakeNoteActivity.this, "in Edit", Toast.LENGTH_SHORT).show();
-//        }
-//        String title = new_note_title.getText().toString().trim();
-//        String content = new_note_content.getText().toString().trim();
-//
-//        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
-//            createNote(title,content);
-//        }else{
-//            Snackbar.make(view, "Fill empty fields",Snackbar.LENGTH_SHORT).show();
-//        }
+//        Toast.makeText(view.getContext(), "Edit", Toast.LENGTH_SHORT).show();
+        if(!isClicked){
+            isClicked=true;
+            fab_edit.animate()
+                    .translationY(view.getHeight())
+                    .alpha(0.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            view.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            toolbar.animate()
+                    .translationY(toolbar.getHeight())
+                    .alpha(0.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            toolbar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            edit_toolbar.animate()
+                    .translationY(edit_toolbar.getHeight())
+                    .alpha(1.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            edit_toolbar.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            new_note_content.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(new_note_content, InputMethodManager.SHOW_IMPLICIT);
+            Log.d("edit","editted in");
+        }
+        String title = new_note_title.getText().toString().trim();
+        String content = new_note_content.getText().toString().trim();
+
+        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
+            createNote(title,content);
+        }else{
+            Snackbar.make(view, "Fill empty fields",Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    public void clickDone(View view){
+        if(isClicked){
+            isClicked=false;
+            fab_edit.animate()
+                    .translationY(0)
+                    .alpha(1.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            fab_edit.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            toolbar.animate()
+                    .translationY(0)
+                    .alpha(1.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            toolbar.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            edit_toolbar.animate()
+                    .translationY(edit_toolbar.getHeight())
+                    .alpha(0.0f)
+                    .setDuration(200)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            edit_toolbar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(new_note_content.getWindowToken(), 0);
+
+        }
     }
 
     private void createNote(String title, String content){
@@ -151,11 +313,6 @@ return true;
     @Override
     protected void onResume() {
         super.onResume();
-        fab_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 }
