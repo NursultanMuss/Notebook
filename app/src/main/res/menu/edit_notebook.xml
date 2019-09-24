@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/done"
+        android:title="Done"
+        app:showAsAction="always"
+        android:onClick="clickDone"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_action_done" />
+    <item
+        android:id="@+id/undo"
+        android:title="undo"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_action_undo" />
+
+    <item
+        android:id="@+id/redo"
+        android:title="redo"
+        app:showAsAction="always"
+        android:orderInCategory="3"
+        android:icon="@drawable/ic_action_redo" />
+    <item
+        android:id="@+id/edit_tools"
+        android:title="Edit Tools"
+        app:showAsAction="always"
+        android:orderInCategory="4"
+        android:icon="@drawable/ic_edit_tools" />
+    <item
+        android:id="@+id/attach"
+        android:title="attach"
+        app:showAsAction="always"
+        android:orderInCategory="5"
+        android:icon="@drawable/ic_action_attach" />
+
+</menu>

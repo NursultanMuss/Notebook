@@ -35,20 +35,24 @@
                 android:paddingBottom="10dp">
 
                 <ImageView
+                    android:id="@+id/notebook_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_notebook" />
+                    android:src="@drawable/ic_notebook"
+                    android:onClick="clickChoseNotebook"/>
 
                 <TextView
+                    android:id="@+id/notebook_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:layout_weight="3"
-                    android:text="asdasdasda"
-                    android:textSize="14dp" />
+                    android:text=""
+                    android:textSize="14dp"
+                    android:onClick="clickChoseNotebook"/>
 
                 <ImageButton
                     android:id="@+id/make_reminder"
