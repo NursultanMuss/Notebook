@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.example.notebook.adapters.NotesAdapter;
 import com.example.notebook.database.DatabaseHandler;
 import com.example.notebook.models.Note;
 import com.github.clans.fab.FloatingActionButton;
@@ -22,8 +23,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.rv_notes)
     RecyclerView rvNotes;
     RecyclerView.Adapter adapter;
     List<Note> notesList;
@@ -43,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife
+        ButterKnife.bind(this);
+        initViews();
+        loadNotes();
 
 //        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
         fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
@@ -107,8 +115,13 @@ public class MainActivity extends AppCompatActivity {
     private void loadNotes(){
         DatabaseHandler db = new DatabaseHandler(this);
 
-        notesList = db.getAllNotes()
+        notesList = db.getAllNotes();
+        if(notesList.size() !=0){
+            adapter = new NotesAdapter(this, notesList);
+            rvNotes.setAdapter(adapter);
+        }
     }
+
 
     @Override    protected void onResume() {
         if (auth.getCurrentUser() == null) {

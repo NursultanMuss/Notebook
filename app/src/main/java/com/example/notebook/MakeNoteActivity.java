@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notebook.database.DatabaseHandler;
+import com.example.notebook.models.Note;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -258,6 +260,18 @@ public class MakeNoteActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(new_note_content.getWindowToken(), 0);
 
+            String title = new_note_title.getText().toString();
+            String note_text = new_note_content.getText().toString();
+            int timeStamp = ServerValue.TIMESTAMP;
+
+            if(title.equals("") || note_text.equals("")){
+                Toast.makeText(this, "Please fill all the fields before saving", Toast.LENGTH_SHORT).show();
+            }else{
+                DatabaseHandler db = new DatabaseHandler(this);
+                Note note = new Note(title,note_text,);
+                db.addNote(note);
+                db.close();
+            }
         }
     }
 
