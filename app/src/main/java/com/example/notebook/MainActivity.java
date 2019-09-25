@@ -4,8 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
+import com.example.notebook.database.DatabaseHandler;
+import com.example.notebook.models.Note;
 import com.github.clans.fab.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,7 +20,13 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    RecyclerView rvNotes;
+    RecyclerView.Adapter adapter;
+    List<Note> notesList;
 
     Button btnSignOut;
     FirebaseAuth auth;
@@ -31,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife
 
 //        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
         fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
@@ -85,6 +98,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
             }
         });
+    }
+
+    private void initViews(){
+        rvNotes.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void loadNotes(){
+        DatabaseHandler db = new DatabaseHandler(this);
+
+        notesList = db.getAllNotes()
     }
 
     @Override    protected void onResume() {
