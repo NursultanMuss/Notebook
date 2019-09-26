@@ -35,6 +35,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     public void onBindViewHolder(@NonNull NotesAdapter.NotesViewHolder notesViewHolder, int i) {
         notesViewHolder.tvTitle.setText(noteList.get(i).getTitle());
         notesViewHolder.tvNote.setText(noteList.get(i).getNote());
+        notesViewHolder.tvTime.setText(noteList.get(i).getTimestamp());
+
     }
 
     @Override
@@ -44,12 +46,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     public class NotesViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tvTitle,tvNote;
+        TextView tvTitle,tvNote, tvTime;
         public NotesViewHolder(View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvNoteTitle);
             tvNote = itemView.findViewById(R.id.tvNoteText);
+            tvTime = itemView.findViewById(R.id.note_date);
 
         }
     }
