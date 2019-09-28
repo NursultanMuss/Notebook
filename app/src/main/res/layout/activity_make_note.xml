@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MakeNoteActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#474646">
+        <include
+            android:id="@+id/new_note_toolbar"
+            layout="@layout/my_toolbar"
+            android:visibility="visible"/>
+        <include
+            android:id="@+id/edit_note_toolbar"
+            layout="@layout/edit_toolbar"
+            android:visibility="gone"/>
+        <EditText
+            android:id="@+id/new_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:hint="@string/headline_note"
+            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/notebook_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_notebook"
+                    android:onClick="clickChoseNotebook"/>
+
+                <TextView
+                    android:id="@+id/notebook_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="3"
+                    android:text=""
+                    android:textSize="14dp"
+                    android:onClick="clickChoseNotebook"/>
+
+                <ImageButton
+                    android:id="@+id/make_reminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/make_reminder"
+                    android:gravity="end"
+                    android:src="@drawable/ic_alarm_on" />
+
+                <ImageButton
+                    android:id="@+id/info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:src="@drawable/ic_info" />
+
+
+            </LinearLayout>
+        <EditText
+            android:id="@+id/new_note_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:gravity="top"/>
+
+    </LinearLayout>
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:onClick="clickEditText"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/ic_edit"
+        fab:fab_size="normal"
+        fab:fab_colorNormal="#F50057"
+        fab:fab_colorPressed="#E8004A"
+        fab:fab_colorRipple="#C20024"
+        fab:fab_shadowColor="#000"
+        fab:fab_elevationCompat="6dp"
+        tools:visibility="visible" />
+
+</android.support.design.widget.CoordinatorLayout>
