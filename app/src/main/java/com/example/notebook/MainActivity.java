@@ -13,6 +13,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.github.clans.fab.FloatingActionButton;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.rv_notes)
     RecyclerView rvNotes;
-    RecyclerView.Adapter adapter;
+//    RecyclerView.Adapter adapter;
     List<Note> notesList;
+    private LinearLayoutManager linearLayoutManager;
+    FirebaseRecyclerAdapter fAdapter;
+    FirebaseAuth fAuth;
+    private FirebaseAuth;
 
     Button btnSignOut;
-    FirebaseAuth auth;
+
     FirebaseUser user;
     ProgressDialog PD;
     private DatabaseReference fNoteDB;
@@ -60,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         ButterKnife.bind(this);
         initViews();
-        loadNotes();
+//        loadNotes();
 
 //        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
         fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
@@ -70,10 +77,13 @@ public class MainActivity extends AppCompatActivity {
         fab_task = (FloatingActionButton) findViewById(R.id.fab_task);
 
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+        rvNotes.setHasFixedSize(true);
+        rvNotes.setLayoutManager(linearLayoutManager);
+
+        fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
         if(user != null){
-            fNoteDB = FirebaseDatabase.getInstance().getReference().child("Notes").child(auth.getCurrentUser().getUid());
+            fNoteDB = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
 
         }
 
@@ -82,64 +92,51 @@ public class MainActivity extends AppCompatActivity {
         PD.setCancelable(true);
         PD.setCanceledOnTouchOutside(false);
 
-        btnSignOut = (Button) findViewById(R.id.sign_out_button);
-
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override            public void onClick(View view) {
-                auth.signOut();
-                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
-                    @Override
-                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        if (user == null) {
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            finish();
-                        }
-                    }
-                };
-            }
-        });
-
-        findViewById(R.id.change_password_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 1));
-            }
-        });
-
-        findViewById(R.id.change_email_button).setOnClickListener(new View.OnClickListener() {
-            @Override            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 2));
-            }
-        });
-
-        findViewById(R.id.delete_user_button).setOnClickListener(new View.OnClickListener() {
-            @Override            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-//        FirebaseRecyclerAdapter<Note, NoteViewHolder> firebaseRecyclerAdapter
-//                =new FirebaseRecyclerAdapter<Note, NoteViewHolder>() {
+//        btnSignOut = (Button) findViewById(R.id.sign_out_button);
 //
 //
-//            @androidx.annotation.NonNull
-//            @Override
-//            public NoteViewHolder onCreateViewHolder(@androidx.annotation.NonNull ViewGroup parent, int viewType) {
-//                return null;
+//
+//        btnSignOut.setOnClickListener(new View.OnClickListener() {
+//            @Override            public void onClick(View view) {
+//                auth.signOut();
+//                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
+//                    @Override
+//                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                        FirebaseUser user = firebaseAuth.getCurrentUser();
+//                        if (user == null) {
+//                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//                            finish();
+//                        }
+//                    }
+//                };
 //            }
+//        });
 //
+//        findViewById(R.id.change_password_button).setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            protected void onBindViewHolder(@androidx.annotation.NonNull NoteViewHolder holder, int position, @androidx.annotation.NonNull Note model) {
-//
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 1));
 //            }
-//        };
+//        });
+//
+//        findViewById(R.id.change_email_button).setOnClickListener(new View.OnClickListener() {
+//            @Override            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 2));
+//            }
+//        });
+//
+//        findViewById(R.id.delete_user_button).setOnClickListener(new View.OnClickListener() {
+//            @Override            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
+//            }
+//        });
+        linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        rvNotes.setLayoutManager(new LinearLayoutManager(this));
+        rvNotes.setHasFixedSize(true);
+
+
+
+        fetch();
     }
 
     private void fetch(){
@@ -160,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build();
 
-        FirebaseRecyclerAdapter fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
+         fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
             @NonNull
             @Override
             public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_note,parent,false);
-
+                Log.d("FirebaseRecyclerAdapter","this is right");
                 return new NoteViewHolder(view);
             }
 
@@ -175,28 +172,40 @@ public class MainActivity extends AppCompatActivity {
                 holder.setNoteTitle(model.getTitle());
                 holder.setNoteContent(model.getNote());
                 holder.setNoteTime(model.getTimestamp());
-
+                Log.d("FirebaseRecyclerAdapter","this is right");
             }
         };
+        rvNotes.setAdapter(fAdapter);
     }
 
     private void initViews(){
-        rvNotes.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
-    private void loadNotes(){
-        DatabaseHandler db = new DatabaseHandler(this);
+//    private void loadNotes(){
+//        DatabaseHandler db = new DatabaseHandler(this);
+//
+//        notesList = db.getAllNotes();
+//        if(notesList.size() !=0){
+//
+//            rvNotes.setAdapter(adapter);
+//        }
+//    }
 
-        notesList = db.getAllNotes();
-        if(notesList.size() !=0){
-            adapter = new NotesAdapter(this, notesList);
-            rvNotes.setAdapter(adapter);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fAdapter.startListening();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        fAdapter.stopListening();
+    }
 
     @Override    protected void onResume() {
-        if (auth.getCurrentUser() == null) {
+        if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }

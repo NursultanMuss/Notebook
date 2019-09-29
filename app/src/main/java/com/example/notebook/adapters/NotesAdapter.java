@@ -53,7 +53,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
             tvTitle = itemView.findViewById(R.id.tvNoteTitle);
             tvNote = itemView.findViewById(R.id.tvNoteText);
-            tvTime = itemView.findViewById(R.id.note_date);
+            tvTime = itemView.findViewById(R.id.tvNoteDate);
 
         }
     }

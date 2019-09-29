@@ -22,9 +22,12 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
-    private FirebaseAuth auth;
+
     private Button btnSignUp, btnLogin;
     private ProgressDialog PD;
+
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
