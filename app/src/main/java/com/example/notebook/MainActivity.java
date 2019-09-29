@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.example.notebook.adapters.NotesAdapter;
 import com.example.notebook.database.DatabaseHandler;
 import com.example.notebook.models.Note;
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
     List<Note> notesList;
     private LinearLayoutManager linearLayoutManager;
     FirebaseRecyclerAdapter fAdapter;
-    FirebaseAuth fAuth;
-    private FirebaseAuth;
+    private FirebaseAuth fAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static final int RC_SIGN_IN = 1;
 
     Button btnSignOut;
 
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         rvNotes.setLayoutManager(linearLayoutManager);
 
         fAuth = FirebaseAuth.getInstance();
+
         user = fAuth.getCurrentUser();
         if(user != null){
             fNoteDB = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
@@ -134,7 +139,25 @@ public class MainActivity extends AppCompatActivity {
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
 
-
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser fUser = firebaseAuth.getCurrentUser();
+                if( fUser != null){
+                    Toast.makeText(MainActivity.this, "You're signed in", Toast.LENGTH_SHORT).show();
+                }else{
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build()))
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
 
         fetch();
     }
@@ -210,6 +233,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         super.onResume();
+        fAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        fAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     public void ClickMakeNote(View v){
