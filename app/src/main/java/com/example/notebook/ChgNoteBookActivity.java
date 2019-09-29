@@ -1,26 +1,37 @@
 package com.example.notebook;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
 
 public class ChgNoteBookActivity extends AppCompatActivity {
 
-    Toolbar mtoolbar;
+    private Toolbar mtoolbar;
+    private Button button_chg_nb;
+    private RecyclerView recyclerView;
+    private final int DIALOG=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chg_note_book);
         mtoolbar = findViewById(R.id.chg_note_toolbar);
+        button_chg_nb = findViewById(R.id.change_notebook_btn);
+        recyclerView = findViewById(R.id.recycler_v_change_notebook);
 
         setSupportActionBar(mtoolbar);
         ActionBar actionBar = this.getSupportActionBar();
@@ -42,7 +53,7 @@ public class ChgNoteBookActivity extends AppCompatActivity {
             case R.id.app_bar_search:
                 return true;
             case  R.id.add_notebook:
-                Toast.makeText(this, "add note book", Toast.LENGTH_SHORT).show();
+                showDialog(DIALOG);
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
@@ -50,5 +61,10 @@ public class ChgNoteBookActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    public void onChooseNoteBook(View view){
+        Intent intent = new Intent();
+        intent.putExtra("notebook", )
     }
 }

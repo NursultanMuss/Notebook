@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,6 +52,7 @@ public class  MakeNoteActivity extends AppCompatActivity {
 
     private DatabaseReference fNotesDatabase;
     private FirebaseAuth fAuth;
+    private static final int PICK_NOTEBOOK_REQUEST =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,13 +274,16 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void clickChoseNotebook(View view){
+    private String clickChoseNotebook(View view){
         Intent intent = new Intent(MakeNoteActivity.this, ChgNoteBookActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,PICK_NOTEBOOK_REQUEST);
+
+
     }
 
     private void createNote(String title, String content){
-        if(fAuth.getCurrentUser() != null){
+
+        Note new_note = new Note()
             final DatabaseReference newNoteRef = fNotesDatabase.push();
 
             final Map noteMap = new HashMap();
@@ -302,11 +307,6 @@ public class  MakeNoteActivity extends AppCompatActivity {
                     });
                 }
             });
-
-
-        }else{
-            Toast.makeText(this, "User is not signed in", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
@@ -326,6 +326,16 @@ return true;
     @Override
     protected void onResume() {
         super.onResume();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == PICK_NOTEBOOK_REQUEST){
+            if(resultCode == RESULT_OK){
+                data.
+            }
+        }
 
     }
 }

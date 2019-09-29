@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 1;
+    String mUsername;
 
     Button btnSignOut;
 
-    FirebaseUser user;
     ProgressDialog PD;
     private DatabaseReference fNoteDB;
 
@@ -86,11 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
 
-        user = fAuth.getCurrentUser();
-        if(user != null){
-            fNoteDB = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
-
-        }
 
         PD = new ProgressDialog(this);
         PD.setMessage("Loading...");
@@ -144,8 +139,11 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser fUser = firebaseAuth.getCurrentUser();
                 if( fUser != null){
-                    Toast.makeText(MainActivity.this, "You're signed in", Toast.LENGTH_SHORT).show();
+                    //User is signed in
+                    onSingedInInitialize(fUser.getDisplayName());
                 }else{
+                    //User is signed out
+                    onSignedOutCleanUp();
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -228,10 +226,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override    protected void onResume() {
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        }
         super.onResume();
         fAuth.addAuthStateListener(mAuthStateListener);
     }
@@ -254,5 +248,12 @@ public class MainActivity extends AppCompatActivity {
     public void ClickMakeAim(View v){
         Intent intent = new Intent(MainActivity.this,MakeAimActivity.class);
         startActivity(intent);
+    }
+
+    private void onSingedInInitialize(String username){
+        mUsername = username;
+    }
+    private void onSignedOutCleanUp(){
+
     }
 }

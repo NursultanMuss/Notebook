@@ -2,6 +2,7 @@ package com.example.notebook.models;
 
 public class Note {
     private String id;
+    private String username;
     private String title;
     private String note;
     private String notebook;
@@ -11,8 +12,9 @@ public class Note {
 
     }
 
-    public Note(String id, String title, String note, String notebook, int timestamp ){
+    public Note(String id, String username,String title, String note, String notebook, int timestamp ){
         this.id = id;
+        this.username = username;
         this.notebook = notebook;
         this.title = title;
         this.note = note;
@@ -31,6 +33,14 @@ public class Note {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {

@@ -4,10 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ChgNoteBookActivity">
+
     <include
         android:id="@+id/chg_note_toolbar"
-        layout="@layout/my_toolbar"/>
+        layout="@layout/my_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_v_change_notebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chg_note_toolbar" />
+
+    <Button
+        android:id="@+id/change_notebook_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Переместить"
+        android:textSize="14sp"
+        android:onClick="onChooseNoteBook"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
