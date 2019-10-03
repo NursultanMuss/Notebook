@@ -46,15 +46,10 @@ public class NotebookChooseFragment extends DialogFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_cancel:
-                getActivity().setResult(Activity.RESULT_CANCELED,intent);
-                getActivity().finish();
+                dismiss();
                 break;
             case R.id.button_ok:
-                if(!TextUtils.isEmpty(newNotebook.getText())) {
-                    String s_newNotebook = newNotebook.getText().toString().trim();
-                    intent.putExtra("new", s_newNotebook);
-                    getActivity().setResult(Activity.RESULT_OK, intent);
-                    getActivity().finish();
+
                 }else{
                     getActivity().setResult(Activity.RESULT_CANCELED,intent);
                     getActivity().finish();
