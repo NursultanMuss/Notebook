@@ -25,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 
-import com.example.notebook.database.DatabaseHandler;
 import com.example.notebook.models.Note;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -274,16 +273,14 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
     }
 
-    private String clickChoseNotebook(View view){
+    public void clickChoseNotebook(View view){
         Intent intent = new Intent(MakeNoteActivity.this, ChgNoteBookActivity.class);
         startActivityForResult(intent,PICK_NOTEBOOK_REQUEST);
-
-
     }
 
     private void createNote(String title, String content){
 
-        Note new_note = new Note()
+        Note new_note = new Note();
             final DatabaseReference newNoteRef = fNotesDatabase.push();
 
             final Map noteMap = new HashMap();
@@ -297,7 +294,6 @@ public class  MakeNoteActivity extends AppCompatActivity {
                     newNoteRef.setValue(noteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-
                             if(task.isSuccessful()){
                                 Toast.makeText(MakeNoteActivity.this, "Заметка добавлена в блокнот", Toast.LENGTH_SHORT).show();
                             }else{
@@ -331,11 +327,12 @@ return true;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_NOTEBOOK_REQUEST){
             if(resultCode == RESULT_OK){
-                data.
+                String notebookName = data.getStringExtra("new");
+                notebook_name.setText(notebookName);
             }
         }
-
     }
 }

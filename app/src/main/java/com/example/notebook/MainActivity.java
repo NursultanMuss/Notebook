@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 
 import com.example.notebook.adapters.NotesAdapter;
-import com.example.notebook.database.DatabaseHandler;
 import com.example.notebook.models.Note;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;

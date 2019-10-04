@@ -50,13 +50,13 @@ public class NotebookChooseFragment extends DialogFragment implements View.OnCli
                 break;
             case R.id.button_ok:
 
-                }else{
-                    getActivity().setResult(Activity.RESULT_CANCELED,intent);
-                    getActivity().finish();
-                }
+//                }else{
+//                    getActivity().setResult(Activity.RESULT_CANCELED,intent);
+//                    getActivity().finish();
+//                }
 
         }
-    }
+    };
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
