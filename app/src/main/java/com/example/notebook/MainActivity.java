@@ -44,7 +44,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.rv_notes)
+//    @BindView(R.id.rv_notes)
     RecyclerView rvNotes;
 //    RecyclerView.Adapter adapter;
     List<Note> notesList;
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private static final String TAG = "MainActivity";
     public static final int RC_SIGN_IN = 1;
     String mUsername;
 
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        rvNotes = findViewById(R.id.rv_notes);
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
 
@@ -180,11 +182,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: is called");
             Query query = fNoteDataBase;
-
+        Log.d(TAG, "onStart: "+fNoteDataBase.toString());
             FirebaseRecyclerOptions<Note> options =
                     new FirebaseRecyclerOptions.Builder<Note>()
-                            .setQuery(query,Note.class)
+                            .setQuery(query, new SnapshotParser<Note>() {
+                                @NonNull
+                                @Override
+                                public Note parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                    return new Note(snapshot.child("title").getValue().toString(),
+                                            snapshot.child("content").getValue().toString(),
+                                            snapshot.child("timeStamp").getValue().toString());
+                                }
+                            })
                             .build();
 
             fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
@@ -193,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                     View view = LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.row_note,parent,false);
-                    Log.d("FirebaseRecyclerAdapter","this is right");
+                    Log.d(TAG, "onCreateViewHolder: is called");                    
                     NoteViewHolder noteViewHolder = new NoteViewHolder(view);
                     return noteViewHolder;
                 }
@@ -201,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 protected void onBindViewHolder(@NonNull NoteViewHolder holder, int position, @NonNull Note model) {
                     String noteId = getRef(position).getKey();
+                    Log.d(TAG, "onBindViewHolder: is called");
                     holder.setNoteTitle(model.getTitle());
                     holder.setNoteContent(model.getContent());
                     holder.setNoteTime(model.getTimestamp());
@@ -210,14 +222,14 @@ public class MainActivity extends AppCompatActivity {
 //                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                            if(dataSnapshot.hasChild("title") && dataSnapshot.hasChild("timeStamp")
 //                                    && dataSnapshot.hasChild("content")){
-//                                String title = dataSnapshot.child("title").getValue().toString();
-//                                String content = dataSnapshot.child("content").getValue().toString();
-//                                String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
+//                            String content = dataSnapshot.child("content").getValue().toString();
+//                            String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
+//                            String title = dataSnapshot.child("title").getValue().toString();
 //
 //                                holder.setNoteTitle(title);
 //                                holder.setNoteContent(content);
 //                                holder.setNoteTime(timeStamp);
-//                                Log.d("FirebaseRecyclerAdapter","this is right");
+//                                Log.d(TAG,"this is right");
 //                            }
 //                        }
 //
@@ -230,13 +242,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             rvNotes.setAdapter(fAdapter);
+        Log.d(TAG, "onStart: start listenning");
         fAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "onStop: is called");
         fAdapter.stopListening();
+        
     }
 
     @Override    protected void onResume() {
