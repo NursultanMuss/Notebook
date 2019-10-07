@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
     List<Note> notesList;
     private LinearLayoutManager linearLayoutManager;
     private DatabaseReference fNoteDataBase;
-    FirebaseRecyclerAdapter fAdapter;
+    FirebaseRecyclerAdapter<Note,NoteViewHolder> fAdapter;
+
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 1;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-        initViews();
+//        initViews();
 //        loadNotes();
 
 //        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
@@ -83,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         fab_task = (FloatingActionButton) findViewById(R.id.fab_task);
 
 
-        rvNotes.setHasFixedSize(true);
-        rvNotes.setLayoutManager(linearLayoutManager);
+//        rvNotes.setHasFixedSize(true);
+//        rvNotes.setLayoutManager(linearLayoutManager);
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -161,60 +162,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        fetch();
+//        fetch();
     }
 
     private void fetch(){
-        Query query = fNoteDataBase.orderByValue();
-
-        FirebaseRecyclerOptions<Note> options =
-                new FirebaseRecyclerOptions.Builder<Note>()
-                .setQuery(query,Note.class)
-                .build();
-
-         fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
-            @NonNull
-            @Override
-            public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_note,parent,false);
-                Log.d("FirebaseRecyclerAdapter","this is right");
-                return new NoteViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull NoteViewHolder holder, int position, @NonNull Note model) {
-                String noteId = getRef(position).getKey();
-                fNoteDataBase.child(noteId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild("title") && dataSnapshot.hasChild("timeStamp")
-                        && dataSnapshot.hasChild("content")){
-                            String title = dataSnapshot.child("title").getValue().toString();
-                            String content = dataSnapshot.child("content").getValue().toString();
-                            String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
-
-                            holder.setNoteTitle(title);
-                            holder.setNoteContent(content);
-                            holder.setNoteTime(timeStamp);
-                            Log.d("FirebaseRecyclerAdapter","this is right");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-        };
-        rvNotes.setAdapter(fAdapter);
-    }
-
-    private void initViews(){
-
-    }
 
 //    private void loadNotes(){
 //        DatabaseHandler db = new DatabaseHandler(this);
@@ -224,11 +175,61 @@ public class MainActivity extends AppCompatActivity {
 //
 //            rvNotes.setAdapter(adapter);
 //        }
-//    }
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
+            Query query = fNoteDataBase;
+
+            FirebaseRecyclerOptions<Note> options =
+                    new FirebaseRecyclerOptions.Builder<Note>()
+                            .setQuery(query,Note.class)
+                            .build();
+
+            fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
+                @NonNull
+                @Override
+                public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    View view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.row_note,parent,false);
+                    Log.d("FirebaseRecyclerAdapter","this is right");
+                    NoteViewHolder noteViewHolder = new NoteViewHolder(view);
+                    return noteViewHolder;
+                }
+
+                @Override
+                protected void onBindViewHolder(@NonNull NoteViewHolder holder, int position, @NonNull Note model) {
+                    String noteId = getRef(position).getKey();
+                    holder.setNoteTitle(model.getTitle());
+                    holder.setNoteContent(model.getContent());
+                    holder.setNoteTime(model.getTimestamp());
+
+//                    fNoteDataBase.child(noteId).addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            if(dataSnapshot.hasChild("title") && dataSnapshot.hasChild("timeStamp")
+//                                    && dataSnapshot.hasChild("content")){
+//                                String title = dataSnapshot.child("title").getValue().toString();
+//                                String content = dataSnapshot.child("content").getValue().toString();
+//                                String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
+//
+//                                holder.setNoteTitle(title);
+//                                holder.setNoteContent(content);
+//                                holder.setNoteTime(timeStamp);
+//                                Log.d("FirebaseRecyclerAdapter","this is right");
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
+
+                }
+            };
+            rvNotes.setAdapter(fAdapter);
         fAdapter.startListening();
     }
 
