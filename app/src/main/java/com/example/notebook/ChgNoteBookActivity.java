@@ -36,6 +36,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     private final int DIALOG=1;
     private DialogFragment dlg1;
     private DatabaseReference mDatabase;
+    private static final String TAG = "ChgNoteBookActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,8 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         mDatabase = FirebaseDatabase.getInstance().getReference("Notebooks");
         String userId = mDatabase.push().getKey();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Notebook notebook = new Notebook(firebaseUser.toString(),new_notebook);
+
+        Notebook notebook = new Notebook(firebaseUser.getDisplayName(),new_notebook);
         mDatabase.child(userId).setValue(notebook);
         Intent intent = new Intent();
         intent.putExtra("new", new_notebook);

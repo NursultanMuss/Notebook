@@ -29,9 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //    RecyclerView.Adapter adapter;
     List<Note> notesList;
     private LinearLayoutManager linearLayoutManager;
+    private DatabaseReference fNoteDataBase;
     FirebaseRecyclerAdapter fAdapter;
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -133,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
 
+        fNoteDataBase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
+
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -160,21 +165,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetch(){
-        Query query = FirebaseDatabase.getInstance().getReference().child("Notes");
+        Query query = fNoteDataBase.orderByValue();
 
         FirebaseRecyclerOptions<Note> options =
                 new FirebaseRecyclerOptions.Builder<Note>()
-                .setQuery(query, new SnapshotParser<Note>() {
-                    @NonNull
-                    @Override
-                    public Note parseSnapshot(@NonNull DataSnapshot snapshot) {
-                        return new Note(snapshot.getKey(),
-                                snapshot.child("title").getValue().toString(),
-                                snapshot.child("content").getValue().toString(),
-                                snapshot.child("notebook").getValue().toString(),
-                                (int)snapshot.child("timeStamp").getValue());
-                    }
-                })
+                .setQuery(query,Note.class)
                 .build();
 
          fAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
@@ -189,10 +184,29 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder holder, int position, @NonNull Note model) {
-                holder.setNoteTitle(model.getTitle());
-                holder.setNoteContent(model.getNote());
-                holder.setNoteTime(model.getTimestamp());
-                Log.d("FirebaseRecyclerAdapter","this is right");
+                String noteId = getRef(position).getKey();
+                fNoteDataBase.child(noteId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild("title") && dataSnapshot.hasChild("timeStamp")
+                        && dataSnapshot.hasChild("content")){
+                            String title = dataSnapshot.child("title").getValue().toString();
+                            String content = dataSnapshot.child("content").getValue().toString();
+                            String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
+
+                            holder.setNoteTitle(title);
+                            holder.setNoteContent(content);
+                            holder.setNoteTime(timeStamp);
+                            Log.d("FirebaseRecyclerAdapter","this is right");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         };
         rvNotes.setAdapter(fAdapter);

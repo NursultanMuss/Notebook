@@ -280,13 +280,14 @@ public class  MakeNoteActivity extends AppCompatActivity {
 
     private void createNote(String title, String content){
 
-        Note new_note = new Note();
             final DatabaseReference newNoteRef = fNotesDatabase.push();
 
             final Map noteMap = new HashMap();
             noteMap.put("title", title);
             noteMap.put("content", content);
             noteMap.put("timeStamp", ServerValue.TIMESTAMP);
+
+
 
             Thread mainThread = new Thread(new Runnable() {
                 @Override
@@ -303,6 +304,8 @@ public class  MakeNoteActivity extends AppCompatActivity {
                     });
                 }
             });
+            mainThread.run();
+
     }
 
     @Override
