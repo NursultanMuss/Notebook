@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.example.notebook.adapters.NotesAdapter;
 import com.example.notebook.models.Note;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -22,10 +24,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +40,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private static final String TAG = "MainActivity";
-    public static final int RC_SIGN_IN = 1;
+    public static final int RC_SIGN_IN = 144;
     String mUsername;
 
     Button btnSignOut;
@@ -139,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
 
-        fNoteDataBase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
+        if(fAuth.getCurrentUser() != null) {
+            fNoteDataBase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
+        }else{
+            fNoteDataBase= FirebaseDatabase.getInstance().getReference();
+        }
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -163,28 +173,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-//        fetch();
-    }
-
-    private void fetch(){
-
-//    private void loadNotes(){
-//        DatabaseHandler db = new DatabaseHandler(this);
-//
-//        notesList = db.getAllNotes();
-//        if(notesList.size() !=0){
-//
-//            rvNotes.setAdapter(adapter);
-//        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: is called");
+        if(fNoteDataBase.child("Notes").child(fAuth.getCurrentUser().getUid()) != null) {
             Query query = fNoteDataBase;
-        Log.d(TAG, "onStart: "+fNoteDataBase.toString());
+            Log.d(TAG, "onStart: " + fNoteDataBase.toString());
             FirebaseRecyclerOptions<Note> options =
                     new FirebaseRecyclerOptions.Builder<Note>()
                             .setQuery(query, new SnapshotParser<Note>() {
@@ -203,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                     View view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.row_note,parent,false);
-                    Log.d(TAG, "onCreateViewHolder: is called");                    
+                            .inflate(R.layout.row_note, parent, false);
+                    Log.d(TAG, "onCreateViewHolder: is called");
                     NoteViewHolder noteViewHolder = new NoteViewHolder(view);
                     return noteViewHolder;
                 }
@@ -216,34 +213,15 @@ public class MainActivity extends AppCompatActivity {
                     holder.setNoteTitle(model.getTitle());
                     holder.setNoteContent(model.getContent());
                     holder.setNoteTime(model.getTimestamp());
-
-//                    fNoteDataBase.child(noteId).addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            if(dataSnapshot.hasChild("title") && dataSnapshot.hasChild("timeStamp")
-//                                    && dataSnapshot.hasChild("content")){
-//                            String content = dataSnapshot.child("content").getValue().toString();
-//                            String timeStamp = dataSnapshot.child("timeStamp").getValue().toString();
-//                            String title = dataSnapshot.child("title").getValue().toString();
-//
-//                                holder.setNoteTitle(title);
-//                                holder.setNoteContent(content);
-//                                holder.setNoteTime(timeStamp);
-//                                Log.d(TAG,"this is right");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
-
                 }
             };
             rvNotes.setAdapter(fAdapter);
-        Log.d(TAG, "onStart: start listenning");
-        fAdapter.startListening();
+            Log.d(TAG, "onStart: start listenning");
+            fAdapter.startListening();
+        }else{
+            setContentView(R.layout.empty_list_notes);
+        }
+
     }
 
     @Override
@@ -281,8 +259,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSingedInInitialize(String username){
         mUsername = username;
+        final Map authMap = new HashMap();
+        authMap.put("name",mUsername);
+        fNoteDataBase.child("Users").push().setValue(authMap);
     }
     private void onSignedOutCleanUp(){
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_SIGN_IN){
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            if(resultCode == RESULT_OK){
+                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+            }else if(response == null){
+                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }else if(response.getError().getErrorCode() == ErrorCodes.NO_NETWORK){
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
     }
 }
