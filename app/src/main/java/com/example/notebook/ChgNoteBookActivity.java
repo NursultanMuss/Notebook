@@ -55,6 +55,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     private DialogFragment dlg1;
     private DatabaseReference f_notebook_ref;
     private FirebaseAuth fAuth;
+    private Notebook notebook;
     private static final String TAG = "ChgNoteBookActivity";
 
     //ArrayList
@@ -74,14 +75,16 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         listView.setAdapter(adapter);
 
         fAuth = FirebaseAuth.getInstance();
-        f_notebook_ref = FirebaseDatabase.getInstance().getReference().child("Notebooks").child(fAuth.getCurrentUser().getUid());
+        f_notebook_ref = FirebaseDatabase.getInstance().getReference().child("Notebooks");
         f_notebook_ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                arrayList.clear();
                 for(DataSnapshot childSnapShot :dataSnapshot.getChildren()) {
                     if (childSnapShot.child("notebookName").getValue() != null) {
-                        String notebookName = dataSnapshot.child("notebookName").getValue().toString();
-                        arrayList.add(notebookName);
+                        notebook = childSnapShot.getValue(Notebook.class);
+//                        String notebookName = dataSnapshot.child("notebookName").getValue().toString();
+                        arrayList.add(notebook.getNotebookName());
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -167,14 +170,16 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     }
 
     @Override
-    public void applyText(String new_notebook) {
+    public void applyText(String s_new_notebook) {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        Notebook notebook = new Notebook(firebaseUser.getDisplayName(),new_notebook);
-        f_notebook_ref.setValue(notebook);
+        if(firebaseUser != null) {
+            notebook = new Notebook(firebaseUser.getDisplayName(), s_new_notebook);
+        }else{notebook = new Notebook("", s_new_notebook);}
+        DatabaseReference newNotebookRef = f_notebook_ref.push();
+        newNotebookRef.setValue(notebook);
         Intent intent = new Intent();
-        intent.putExtra("new", new_notebook);
+        intent.putExtra("new", s_new_notebook);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

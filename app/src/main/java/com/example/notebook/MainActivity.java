@@ -15,12 +15,14 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.github.clans.fab.FloatingActionButton;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 144;
     String mUsername;
 
+    private LinearLayout linearLayout;
+
     Button btnSignOut;
 
     ProgressDialog PD;
-    private DatabaseReference fNoteDB;
+
 
     FloatingActionButton fab_plus, fab_note, fab_task, fab_aim;
     Animation FabOpen, FabClose, ChgBtn;
@@ -82,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-//        initViews();
-//        loadNotes();
 
 //        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
         fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
@@ -140,16 +142,13 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
 //            }
 //        });
+
+        linearLayout = findViewById(R.id.ll_empty_notebook);
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         rvNotes = findViewById(R.id.rv_notes);
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
-
-        if(fAuth.getCurrentUser() != null) {
-            fNoteDataBase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
-        }else{
-            fNoteDataBase= FirebaseDatabase.getInstance().getReference();
-        }
+        fNoteDataBase= FirebaseDatabase.getInstance().getReference();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -179,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: is called");
-        if(fNoteDataBase.child("Notes").child(fAuth.getCurrentUser().getUid()) != null) {
-            Query query = fNoteDataBase;
+        if(TextUtils.isEmpty(FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid()).getKey())) {
+
+            Query query = fNoteDataBase.child("Notes").child(fAuth.getCurrentUser().getUid());
             Log.d(TAG, "onStart: " + fNoteDataBase.toString());
             FirebaseRecyclerOptions<Note> options =
                     new FirebaseRecyclerOptions.Builder<Note>()
@@ -219,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onStart: start listenning");
             fAdapter.startListening();
         }else{
-            setContentView(R.layout.empty_list_notes);
+            linearLayout.setVisibility(View.VISIBLE);
+            rvNotes.setVisibility(View.GONE);
         }
 
     }
@@ -228,7 +229,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: is called");
-        fAdapter.stopListening();
+        if(fAuth.getCurrentUser() != null) {
+            fAdapter.stopListening();
+        }
         
     }
 
@@ -259,9 +262,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSingedInInitialize(String username){
         mUsername = username;
-        final Map authMap = new HashMap();
-        authMap.put("name",mUsername);
-        fNoteDataBase.child("Users").push().setValue(authMap);
+//        final Map authMap = new HashMap();
+//        authMap.put("name",mUsername);
+//        fNoteDataBase.child("Users").push().setValue(authMap);
     }
     private void onSignedOutCleanUp(){
 
