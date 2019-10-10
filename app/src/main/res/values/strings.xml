@@ -1,5 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">NoteBook</string>
+    <string name="app_email">nuran.stv@gmail.com</string>
     <string name="note_ru">Текстовая заметка</string>
     <string name="task_ru">Задача</string>
     <string name="aim_ru">Цель</string>
@@ -8,5 +9,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="empty_notepad">Нажмите + , чтобы создать заметку, цель или задачу.</string>
+    <string name="empty_notepad" tools:ignore="ExtraTranslation">Нажмите + , чтобы создать заметку, цель или задачу.</string>
+
+    //Navigation Strings
+    <string name="nav_notes">Заметки</string>
+    <string name="nav_notebooks">Блокноты</string>
+    <string name="nav_tasks">Задачи</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_sync">Синхронизация</string>
+    <string name="nav_log_out">Выйти из системы</string>
 </resources>
