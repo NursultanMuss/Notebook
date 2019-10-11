@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     
-    <style name="MyCustomTheme">
+    <style name="AppTheme.Dark">
         <item name="android:background">#474646</item>
     </style>
 

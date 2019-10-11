@@ -27,7 +27,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout linearLayout;
 
+    //for Navigation Drawer
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    //for Navigation Drawer
     Button btnSignOut;
 
     ProgressDialog PD;
@@ -142,7 +150,18 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
 //            }
 //        });
+     //For Navigation Drawer
+        toolbar = findViewById(R.id.draw_toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = findViewById(R.id.draw_layout);
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar
+                ,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+
+        //For Navigation Drawer
         linearLayout = findViewById(R.id.ll_empty_notebook);
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         rvNotes = findViewById(R.id.rv_notes);
@@ -175,10 +194,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onStart()  {
         super.onStart();
         Log.d(TAG, "onStart: is called");
-        if(TextUtils.isEmpty(FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid()).getKey())) {
+        if(fAuth.getCurrentUser()!=null) {
 
             Query query = fNoteDataBase.child("Notes").child(fAuth.getCurrentUser().getUid());
             Log.d(TAG, "onStart: " + fNoteDataBase.toString());

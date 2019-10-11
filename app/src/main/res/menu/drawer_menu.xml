@@ -33,11 +33,10 @@
                 android:title="@string/nav_sync" />
         </menu>
     </item>
-    <item android:title="@string/nav_log_out">
-        <menu>
-            <item
-                android:id="@+id/nav_log_out"
-                android:title="@string/nav_log_out" />
-        </menu>
+    <item
+        android:id="@+id/nav_log_out"
+        android:title="@string/nav_log_out">
+
     </item>
+
 </menu>

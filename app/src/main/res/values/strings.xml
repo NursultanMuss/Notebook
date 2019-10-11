@@ -18,4 +18,8 @@
     <string name="nav_settings">Настройки</string>
     <string name="nav_sync">Синхронизация</string>
     <string name="nav_log_out">Выйти из системы</string>
+    
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
 </resources>

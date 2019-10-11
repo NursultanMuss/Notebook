@@ -9,8 +9,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:gravity="center"
-    android:padding="16dp"
-    tools:context="com.example.notebook.MainActivity">
+
+    tools:context="com.example.notebook.MainActivity"
+    tools:openDrawer="start">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
