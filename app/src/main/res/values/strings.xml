@@ -9,7 +9,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="empty_notepad" tools:ignore="ExtraTranslation">Нажмите + , чтобы создать заметку, цель или задачу.</string>
+    <string name="empty_notepad" >Нажмите + , чтобы создать заметку, цель или задачу.</string>
 
     //Navigation Strings
     <string name="nav_notes">Заметки</string>
@@ -21,5 +21,15 @@
     
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    
+    //Toolbar Strings
+    <string name="toolbar_all_notes">Все заметки</string>
+
+    //Main menu
+    <string name="menu_language">Язык</string>
+    <string name="search">Поиск</string>
+
+    //Notes
+    <string name="new_notebook_add">Добавлен новый блокнот</string>
 
 </resources>

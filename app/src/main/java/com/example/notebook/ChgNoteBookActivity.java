@@ -5,14 +5,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,8 @@ import com.example.notebook.models.Notebook;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -41,6 +46,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -48,7 +55,10 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
 
     private Toolbar mtoolbar;
     private Button button_chg_nb;
-    private ListView listView;
+
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private FirebaseRecyclerAdapter<Notebook, NotebookViewHolder> fAdapter;
 
 
     private final int DIALOG=1;
@@ -68,61 +78,16 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         setContentView(R.layout.activity_chg_note_book);
         mtoolbar = findViewById(R.id.chg_note_toolbar);
         button_chg_nb = findViewById(R.id.change_notebook_btn);
-
-        listView = findViewById(R.id.lv_change_notebook);
-        adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, arrayList);
-
-        listView.setAdapter(adapter);
+        //for RecyclerView
+        recyclerView = findViewById(R.id.rv_change_notebook);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        //for RecyclerView
 
         fAuth = FirebaseAuth.getInstance();
-        f_notebook_ref = FirebaseDatabase.getInstance().getReference().child("Notebooks");
-        f_notebook_ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                arrayList.clear();
-                for(DataSnapshot childSnapShot :dataSnapshot.getChildren()) {
-                    if (childSnapShot.child("notebookName").getValue() != null) {
-                        notebook = childSnapShot.getValue(Notebook.class);
-//                        String notebookName = dataSnapshot.child("notebookName").getValue().toString();
-                        arrayList.add(notebook.getNotebookName());
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                for(DataSnapshot childSnapShot :dataSnapshot.getChildren()) {
-                    if (childSnapShot.child("notebookName").getValue() != null) {
-//                        String notebookName = dataSnapshot.child("notebookName").getValue().toString();
-//                        arrayList.add(notebookName);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot childSnapShot :dataSnapshot.getChildren()) {
-                    if (childSnapShot.child("notebookName").getValue() != null) {
-                        String notebookName = dataSnapshot.child("notebookName").getValue().toString();
-                        arrayList.remove(notebookName);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        f_notebook_ref = FirebaseDatabase.getInstance().getReference().child("Notebooks")
+                .child(fAuth.getCurrentUser().getUid());
 
         dlg1 = new DialogFragment();
 
@@ -131,6 +96,43 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         if(actionBar!= null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Query query = f_notebook_ref;
+        FirebaseRecyclerOptions<Notebook> options = new FirebaseRecyclerOptions.Builder<Notebook>()
+                .setQuery(query, new SnapshotParser<Notebook>() {
+                    @NonNull
+                    @Override
+                    public Notebook parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        return new Notebook(snapshot.child("user").getValue().toString(),
+                                snapshot.child("notebookName").getValue().toString());
+                    }
+                }).build();
+        fAdapter = new FirebaseRecyclerAdapter<Notebook, NotebookViewHolder>(options) {
+            @NonNull
+            @Override
+            public NotebookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_notebook,parent,false);
+                return new NotebookViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull NotebookViewHolder holder, int position, @NonNull Notebook model) {
+                holder.setNotebookTitle(model.getNotebookName());
+            }
+        };
+        recyclerView.setAdapter(fAdapter);
+        fAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        fAdapter.stopListening();
     }
 
     @Override
@@ -173,44 +175,45 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     public void applyText(String s_new_notebook) {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser != null) {
-            notebook = new Notebook(firebaseUser.getDisplayName(), s_new_notebook);
-        }else{notebook = new Notebook("", s_new_notebook);}
         DatabaseReference newNotebookRef = f_notebook_ref.push();
-        newNotebookRef.setValue(notebook);
+            final Map noteMap = new HashMap();
+            noteMap.put("user", firebaseUser.getDisplayName());
+            noteMap.put("notebookName", s_new_notebook);
+
+        Thread mainThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                newNotebookRef.setValue(noteMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(ChgNoteBookActivity.this, R.string.new_notebook_add, Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(ChgNoteBookActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+        mainThread.run();
+
         Intent intent = new Intent();
         intent.putExtra("new", s_new_notebook);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
+}
 
-    //    @Override
-    //    protected void onStart() {
-    //        super.onStart();
-    //        Query query= f_notebook_ref;
-    //        FirebaseRecyclerOptions<Notebook> options =
-    //                new FirebaseRecyclerOptions.Builder<Notebook>()
-    //                .setQuery(query, new SnapshotParser<Notebook>() {
-    //                    @NonNull
-    //                    @Override
-    //                    public Notebook parseSnapshot(@NonNull DataSnapshot snapshot) {
-    //                        return new Notebook(snapshot.child("user").getValue().toString(),
-    //                                snapshot.child("notebookName").getValue().toString());
-    //                    }
-    //                })
-    //                .build();
-    //    }
+class NotebookViewHolder extends RecyclerView.ViewHolder{
+    View mView;
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//    }
-//
-//    public class NotebookViewHolder extends RecyclerView.ViewHolder{
-//
-//        View mView;
-//        public NotebookViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//        }
-//    }
+    TextView notebookTitle;
+    public NotebookViewHolder(@NonNull View itemView) {
+        super(itemView);
+        mView = itemView;
+    }
+    public void setNotebookTitle(String title){
+        notebookTitle = mView.findViewById(R.id.notebook_title);
+        notebookTitle.setText(title);
+    }
 }
