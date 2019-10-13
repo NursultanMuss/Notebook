@@ -9,6 +9,29 @@
         android:id="@+id/rv_notebooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/ll_empty_notebooks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/imageView_notebooks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            app:srcCompat="@drawable/notepad" />
+
+        <TextView
+            android:id="@+id/textView_notebooks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/empty_notepad" />
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -33,13 +33,10 @@ import java.util.Arrays;
 
 
 public class AllNotesFragment extends Fragment {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "AllNotesFragment";
     private FirebaseAuth fAuth;
     private DatabaseReference fNoteDataBase;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseRecyclerAdapter<Note, NoteViewHolder> fAdapter;
-    public static final int RC_SIGN_IN = 144;
-    private String mUsername;
 
 
     private LinearLayout linearLayout;
@@ -59,33 +56,13 @@ public class AllNotesFragment extends Fragment {
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser fUser = firebaseAuth.getCurrentUser();
-                if (fUser != null) {
-                    //User is signed in
-                    onSingedInInitialize(fUser.getDisplayName());
-                } else {
-                    //User is signed out
-                    onSignedOutCleanUp();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
+
+
 
         // Firebase initialize
 
         //for RecyclerView
-        linearLayout = view.findViewById(R.id.ll_empty_notebook);
+        linearLayout = view.findViewById(R.id.ll_empty_notes);
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvNotes = view.findViewById(R.id.rv_notes);
         rvNotes.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -151,45 +128,8 @@ public class AllNotesFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        fAuth.addAuthStateListener(mAuthStateListener);
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        fAuth.removeAuthStateListener(mAuthStateListener);
-    }
 
-    private void onSingedInInitialize(String username) {
-        mUsername = username;
-//        final Map authMap = new HashMap();
-//        authMap.put("name",mUsername);
-//        fNoteDataBase.child("Users").push().setValue(authMap);
-    }
 
-    private void onSignedOutCleanUp() {
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (getActivity() != null) {
-            if (requestCode == RC_SIGN_IN) {
-                IdpResponse response = IdpResponse.fromResultIntent(data);
-                if (resultCode == getActivity().RESULT_OK) {
-                    Toast.makeText(getActivity(), "Signed in!", Toast.LENGTH_SHORT).show();
-                } else if (response == null) {
-                    Toast.makeText(getActivity(), "Sign in canceled", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
-
-                } else if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
 }

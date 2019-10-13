@@ -53,6 +53,8 @@ public class  MakeNoteActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private static final int PICK_NOTEBOOK_REQUEST =1;
 
+    private boolean isExist;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +174,7 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
         String title = new_note_title.getText().toString().trim();
         String content = new_note_content.getText().toString().trim();
+        String notebook =
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
             createNote(title,content);
@@ -278,7 +281,7 @@ public class  MakeNoteActivity extends AppCompatActivity {
         startActivityForResult(intent,PICK_NOTEBOOK_REQUEST);
     }
 
-    private void createNote(String title, String content){
+    private void createNote(String title, String content, String notebook){
 
             final DatabaseReference newNoteRef = fNotesDatabase.push();
 
@@ -286,6 +289,7 @@ public class  MakeNoteActivity extends AppCompatActivity {
             noteMap.put("title", title);
             noteMap.put("content", content);
             noteMap.put("timeStamp", ServerValue.TIMESTAMP);
+            noteMap.put("notebook", notebook);
 
 
 

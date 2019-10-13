@@ -204,16 +204,4 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     }
 }
 
-class NotebookViewHolder extends RecyclerView.ViewHolder{
-    View mView;
 
-    TextView notebookTitle;
-    public NotebookViewHolder(@NonNull View itemView) {
-        super(itemView);
-        mView = itemView;
-    }
-    public void setNotebookTitle(String title){
-        notebookTitle = mView.findViewById(R.id.notebook_title);
-        notebookTitle.setText(title);
-    }
-}
