@@ -3,7 +3,9 @@ package com.example.notebook;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -81,6 +83,10 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }else{
             actionBar.setIcon(R.drawable.ic_action_done);
         }
+        //SharedPreference - get Default Notebook name
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        notebook_name.setText(pref.getString("NOTEBOOK_PREF",""));
+        //SharedPreference - get Default Notebook name
         fAuth = FirebaseAuth.getInstance();
         fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
     }
@@ -174,10 +180,10 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
         String title = new_note_title.getText().toString().trim();
         String content = new_note_content.getText().toString().trim();
-        String notebook =
+        String notebook = notebook_name.getText().toString().trim();
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
-            createNote(title,content);
+            createNote(title,content, notebook);
         }else{
             Snackbar.make(view, "Fill empty fields",Snackbar.LENGTH_SHORT).show();
         }
@@ -267,9 +273,11 @@ public class  MakeNoteActivity extends AppCompatActivity {
 
             String title = new_note_title.getText().toString().trim();
             String note_text = new_note_content.getText().toString().trim();
+            String notebook = notebook_name.getText().toString().trim();
+
 
             if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(note_text)){
-                createNote(title,note_text);
+                createNote(title,note_text,notebook);
             }else{
                 Toast.makeText(this, "Please fill all the fields before saving", Toast.LENGTH_SHORT).show();
             }

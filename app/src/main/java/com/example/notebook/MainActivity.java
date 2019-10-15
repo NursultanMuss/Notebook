@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new AllTasksFragment()).commit();
                         break;
+                    case R.id.nav_settings:
+                        Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
                     case R.id.nav_log_out:
                         AuthUI.getInstance().signOut(MainActivity.this);
                         break;

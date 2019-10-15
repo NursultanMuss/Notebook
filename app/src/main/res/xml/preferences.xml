@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="NOTEBOOK_PREF"
+        android:title="@string/pref_notebook_title"
+        android:summary="@string/pref_notebook_summary_def">
+        <intent
+            android:targetPackage="com.example.notebook"
+            android:targetClass="com.example.notebook.ChgNoteBookActivity"/>
+    </Preference>
+
+</PreferenceScreen>
