@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_settings:
                         Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                        startActivity(intent);
                     case R.id.nav_log_out:
                         AuthUI.getInstance().signOut(MainActivity.this);
                         break;
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == RC_SIGN_IN) {
                 IdpResponse response = IdpResponse.fromResultIntent(data);
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Signed in, yuuuhoo!", Toast.LENGTH_SHORT).show();
                 } else if (response == null) {
                     Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
                     finish();
