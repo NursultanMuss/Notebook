@@ -20,6 +20,7 @@ import android.widget.Button;
 
 import com.example.notebook.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class NotebookChooseFragment extends DialogFragment implements View.OnClickListener {
     TextInputEditText newNotebook;

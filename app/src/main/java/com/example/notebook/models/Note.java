@@ -1,7 +1,6 @@
 package com.example.notebook.models;
 
 public class Note {
-    private String username;
     private String title;
     private String content;
     private String notebook;
@@ -11,8 +10,7 @@ public class Note {
 
     }
 
-    public Note(String username,String title, String note, String notebook, String timestamp ){
-        this.username = username;
+    public Note(String title, String content, String timestamp, String notebook ){
         this.notebook = notebook;
         this.title = title;
         this.content = content;
@@ -27,13 +25,7 @@ public class Note {
 
 
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getTitle() {
         return title;

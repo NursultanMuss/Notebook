@@ -4,19 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ChgNoteBookActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_change_notebook"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    tools:context=".ChooseNotebookActivity">
+    <include
+        android:id="@+id/choose_note_toolbar"
+        layout="@layout/my_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_choose_notebook"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/choose_note_toolbar" />
+
     <Button
-        android:id="@+id/change_notebook_btn"
+        android:id="@+id/choose_notebook_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Переместить"
@@ -25,7 +30,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

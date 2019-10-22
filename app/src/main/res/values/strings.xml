@@ -37,4 +37,22 @@
     <string name="pref_notebook_title">Личный блокнот по умолчанию</string>
     <string name="pref_notebook_summary_def">Не выбран</string>
 
+    //Notebook
+    <string name="new_notebook">Новый блокнот</string>
+    <string name="no_notebooks">Нет блокнотов</string>
+
+    //Tasks
+    <string name="new_task">Новая задача</string>
+    <string name="task_checkbox_check">Готово!</string>
+    <string name="task_checkbox_uncheck">Задача завершена</string>
+
+    //for Dialog
+    <string name="negative">ОТМЕНА</string>
+    <string name="positive">ОК</string>
+    
+    //for Task RadioGroup
+    <string name="radio_high">Очень важно!</string>
+    <string name="radio_medium">Средне важно!</string>
+    <string name="radio_low">Обычно</string>
+
 </resources>

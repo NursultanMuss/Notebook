@@ -2,10 +2,15 @@ package com.example.notebook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 
-
+import com.example.notebook.fragments.AllNotebooksFragment;
+import com.example.notebook.fragments.AllNotesFragment;
+import com.example.notebook.fragments.AllTasksFragment;
+import com.example.notebook.fragments.Dialog;
+import com.example.notebook.fragments.TaskDialog;
 import com.firebase.ui.auth.AuthUI;
 
 import com.firebase.ui.auth.ErrorCodes;
@@ -13,6 +18,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.github.clans.fab.FloatingActionButton;
 
 
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -27,6 +33,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUser fUser;
     public static final int RC_SIGN_IN = 144;
     private String mUsername;
 
@@ -53,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog PD;
 
 
-    FloatingActionButton fab_note, fab_task, fab_aim;
+    FloatingActionButton fab_note, fab_task;
+    FloatingActionMenu fab_menu;
 
 
     @Override
@@ -61,13 +70,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         fAuth = FirebaseAuth.getInstance();
-
+        fUser=fAuth.getCurrentUser();
         ButterKnife.bind(this);
 
 //        fabs leave hear in MainActivity
-        fab_aim = (FloatingActionButton) findViewById(R.id.fab_aim);
+        fab_menu = findViewById(R.id.menu);
         fab_note = (FloatingActionButton) findViewById(R.id.fab_note);
         fab_task = (FloatingActionButton) findViewById(R.id.fab_task);
 
@@ -81,49 +89,12 @@ public class MainActivity extends AppCompatActivity {
         PD.setCanceledOnTouchOutside(false);
 // ProgressDialog maybe come in handy
 
-//        btnSignOut = (Button) findViewById(R.id.sign_out_button);
-//
-//
-//
-//        btnSignOut.setOnClickListener(new View.OnClickListener() {
-//            @Override            public void onClick(View view) {
-//                auth.signOut();
-//                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
-//                    @Override
-//                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                        FirebaseUser user = firebaseAuth.getCurrentUser();
-//                        if (user == null) {
-//                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                            finish();
-//                        }
-//                    }
-//                };
-//            }
-//        });
-//
-//        findViewById(R.id.change_password_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 1));
-//            }
-//        });
-//
-//        findViewById(R.id.change_email_button).setOnClickListener(new View.OnClickListener() {
-//            @Override            public void onClick(View view) {
-//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 2));
-//            }
-//        });
-//
-//        findViewById(R.id.delete_user_button).setOnClickListener(new View.OnClickListener() {
-//            @Override            public void onClick(View view) {
-//                startActivity(new Intent(getApplicationContext(), ForgetAndChangePasswordActivity.class).putExtra("Mode", 3));
-//            }
-//        });
 
         /*For Navigation Drawer leave in MainActivity*/
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new AllNotesFragment()).commit();
         toolbar = findViewById(R.id.draw_toolbar);
+        GetTimeAgo getTimeAgo =  new GetTimeAgo();
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.draw_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -223,19 +194,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ClickMakeNote(View v) {
+        fab_menu.close(true);
         Intent intent = new Intent(MainActivity.this, MakeNoteActivity.class);
         startActivity(intent);
     }
 
     public void ClickMakeTask(View v) {
-        Intent intent = new Intent(MainActivity.this, MakeTaskActivity.class);
-        startActivity(intent);
+        TaskDialog taskDialog = new TaskDialog();
+        fab_menu.close(true);
+        taskDialog.show(getSupportFragmentManager(),"taskDialog");
     }
 
-    public void ClickMakeAim(View v) {
-        Intent intent = new Intent(MainActivity.this, MakeAimActivity.class);
-        startActivity(intent);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -254,4 +223,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

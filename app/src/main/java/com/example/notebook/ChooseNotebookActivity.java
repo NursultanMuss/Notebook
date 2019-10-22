@@ -1,10 +1,16 @@
 package com.example.notebook;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,26 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.notebook.fragments.Dialog;
-import com.example.notebook.models.Note;
 import com.example.notebook.models.Notebook;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -42,21 +34,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
+public class ChooseNotebookActivity extends AppCompatActivity implements Dialog.DialogListener {
 
-public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.DialogListener {
-
+    private Toolbar mtoolbar;
     private Button button_chg_nb;
 
     private LinearLayoutManager linearLayoutManager;
@@ -72,21 +60,16 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
     private FirebaseUser fUser;
 
     private Notebook notebook;
-    private String ch_notebook;
-    private ImageView ch_img_view;
     private static final String TAG = "ChgNoteBookActivity";
-
-    //ArrayList
-    private ArrayList<String> arrayList = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chg_note_book);
-        button_chg_nb = findViewById(R.id.change_notebook_btn);
+        setContentView(R.layout.activity_choose_notebook);
+
+        mtoolbar = findViewById(R.id.choose_note_toolbar);
+        button_chg_nb = findViewById(R.id.choose_notebook_btn);
         //for RecyclerView
-        recyclerView = findViewById(R.id.rv_change_notebook);
+        recyclerView = findViewById(R.id.rv_choose_notebook);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -99,6 +82,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
 
         dlg1 = new DialogFragment();
 
+        setSupportActionBar(mtoolbar);
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -135,15 +119,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
 
                     @Override
                     protected void onBindViewHolder(@NonNull NotebookViewHolder holder, int position, @NonNull Notebook model) {
-                        String noteID= getRef(position).getKey();
                         holder.setNotebookTitle(model.getNotebookName());
-                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ch_notebook = model.getNotebookName();
-                                holder.setImageViewChoosen();
-                            }
-                        });
                     }
                 };
 
@@ -194,16 +170,15 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
 
     public void openDialog() {
         Dialog dlg2 = new Dialog();
-        dlg2.show(getSupportFragmentManager(), "add notebook dialog");
+        dlg2.show(getSupportFragmentManager(), "example dialog");
     }
 
     public void onChooseNoteBook(View view) {
-        if(!TextUtils.isEmpty(ch_notebook)) {
-            Intent intent = new Intent();
-            intent.putExtra("new", ch_notebook);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        }
+//        if(!TextUtils.isEmpty(newNotebook.getText())) {
+//            String s_newNotebook = newNotebook.getText().toString().trim();
+//            intent.putExtra("new", s_newNotebook);
+//            getActivity().setResult(Activity.RESULT_OK, intent);
+//            getActivity().finish();
     }
 
     @Override
@@ -222,9 +197,9 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ChgNoteBookActivity.this, R.string.new_notebook_add, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChooseNotebookActivity.this, R.string.new_notebook_add, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(ChgNoteBookActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChooseNotebookActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -237,8 +212,4 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
-
-
 }
-
-

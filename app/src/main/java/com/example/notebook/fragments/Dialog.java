@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.notebook.R;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Dialog extends AppCompatDialogFragment {
 
@@ -27,7 +28,7 @@ public class Dialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_new, null);
 
         builder.setView(view)
-                .setTitle("Новый блокнот")
+                .setTitle(R.string.new_notebook)
                 .setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

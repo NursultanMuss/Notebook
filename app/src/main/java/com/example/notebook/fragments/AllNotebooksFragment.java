@@ -1,4 +1,4 @@
-package com.example.notebook;
+package com.example.notebook.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notebook.NotebookViewHolder;
+import com.example.notebook.R;
 import com.example.notebook.models.Note;
 import com.example.notebook.models.Notebook;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -36,6 +38,7 @@ public class AllNotebooksFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_all_notebooks,container,false);
     }
 
@@ -43,6 +46,7 @@ public class AllNotebooksFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view= getView();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();

@@ -5,6 +5,7 @@
         android:id="@+id/done"
         android:title="Done"
         app:showAsAction="always"
+        android:visible="false"
         android:onClick="clickDone"
         android:orderInCategory="1"
         android:icon="@drawable/ic_action_done" />
@@ -12,6 +13,7 @@
         android:id="@+id/undo"
         android:title="undo"
         app:showAsAction="always"
+        android:visible="false"
         android:orderInCategory="2"
         android:icon="@drawable/ic_action_undo" />
 
@@ -19,19 +21,28 @@
         android:id="@+id/redo"
         android:title="redo"
         app:showAsAction="always"
+        android:visible="false"
         android:orderInCategory="3"
         android:icon="@drawable/ic_action_redo" />
     <item
         android:id="@+id/edit_tools"
         android:title="Edit Tools"
         app:showAsAction="always"
+        android:visible="false"
         android:orderInCategory="4"
         android:icon="@drawable/ic_edit_tools" />
     <item
         android:id="@+id/attach"
         android:title="attach"
         app:showAsAction="always"
+        android:visible="false"
         android:orderInCategory="5"
         android:icon="@drawable/ic_action_attach" />
+    <item
+        android:id="@+id/delete"
+        android:title="Удалить"
+        app:showAsAction="never"
+        android:visible="true"
+        android:orderInCategory="6"/>
 
 </menu>

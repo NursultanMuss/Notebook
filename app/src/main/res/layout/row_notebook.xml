@@ -15,6 +15,7 @@
             android:id="@+id/checked_imageView"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_check_black" />
 
         <TextView

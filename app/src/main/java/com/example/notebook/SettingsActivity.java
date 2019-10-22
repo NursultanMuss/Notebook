@@ -6,9 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.util.Log;
+import android.view.MenuItem;
 
-public class SettingsActivity extends PreferenceActivity {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
+
+public class SettingsActivity extends AppCompatActivity {
     private Toolbar toolbar;
+    private FirebaseUser fUser;
+    private FirebaseDatabase fDatabase;
+    private FirebaseAuth fAuth;
+    private static final String TAG = "SettingsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,13 +29,29 @@ public class SettingsActivity extends PreferenceActivity {
         toolbar = findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
 
+        fAuth= FirebaseAuth.getInstance();
+        fUser= fAuth.getCurrentUser();
+        Log.d(TAG, "onCreate: "+ fUser.getDisplayName());
+        fDatabase= FirebaseDatabase.getInstance();
+
+
         getSupportActionBar().setTitle(R.string.activity_title);
 
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
+
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        preference
+        getSupportFragmentManager().beginTransaction().add(R.id.pref_fragment_container, new SettingsFragment())
+                .commit();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            Log.d(TAG, "onOptionsItemSelected: ");
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,7 +6,7 @@
         android:summary="@string/pref_notebook_summary_def">
         <intent
             android:targetPackage="com.example.notebook"
-            android:targetClass="com.example.notebook.ChgNoteBookActivity"/>
+            android:targetClass="com.example.notebook.ChooseNotebookActivity"/>
     </Preference>
 
 </PreferenceScreen>
