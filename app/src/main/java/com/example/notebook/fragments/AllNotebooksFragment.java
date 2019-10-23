@@ -46,7 +46,7 @@ public class AllNotebooksFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view= getView();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();
