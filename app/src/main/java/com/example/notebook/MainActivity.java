@@ -21,6 +21,7 @@ import com.github.clans.fab.FloatingActionButton;
 
 
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -219,6 +220,61 @@ public class MainActivity extends AppCompatActivity  {
         TaskDialog taskDialog = new TaskDialog();
         fab_menu.close(true);
         taskDialog.show(getSupportFragmentManager(),"taskDialog");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_language) {
+//            Modifying Locale if User clicked language from options pane
+            Resources resources = getResources();
+            SharedPreferences sharedPreferences = getSharedPreferences("localePref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            if(sharedPreferences.getString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE).equals(ENGLISH_LOCALE)){
+                locale = new Locale(RUSSIAN_LOCALE);
+                editor.putString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE);
+            } else {
+                locale = new Locale(ENGLISH_LOCALE);
+                editor.putString(KEY_LANGUAGE_PREF, ENGLISH_LOCALE);
+            }
+            editor.apply();
+
+            Configuration configuration = resources.getConfiguration();
+            configuration.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(configuration,
+                    getBaseContext().getResources().getDisplayMetrics());
+            recreate();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("localePref", MODE_PRIVATE);
+
+        MenuItem item = menu.getItem(1);
+        if(sharedPreferences.getString(KEY_LANGUAGE_PREF, ENGLISH_LOCALE).equals(RUSSIAN_LOCALE)){
+            item.setTitle("English");
+        } else {
+            item.setTitle("Русский");
+
+        }
+
+        return true;
     }
 
     @Override

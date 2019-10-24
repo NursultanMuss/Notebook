@@ -14,17 +14,6 @@
         <activity android:name=".Settings2Activity"
             android:configChanges="locale"></activity>
         <activity
-            android:name=".ChooseNotebookActivity"
-            android:parentActivityName=".SettingsActivity"
-            android:configChanges="locale">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivity" />
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".ChgNoteBookActivity"
             android:parentActivityName=".MakeNoteActivity"
             android:configChanges="locale">
