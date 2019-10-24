@@ -63,6 +63,7 @@ public class AllNotesFragment extends Fragment {
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();
+        fNoteDataBase.keepSynced(true);
 
 
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NoteBook</string>
+    <string name="aim_ru">Мақсат</string>
+    <string name="app_email">nuran.stv@gmail.com</string>
+    <string name="empty_notepad">+ басып жаңа жазба немесе міндет жасаңыз</string>
+    <string name="headline_note">Жазбаның басы</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lang_default">Орысша</string>
+    <string name="menu_language">Тіл</string>
+    <string name="nav_log_out">Шығу</string>
+    <string name="nav_notebooks">Блокноттар</string>
+    <string name="nav_notes">Жазбалар</string>
+    <string name="nav_settings">Настройкалар</string>
+    <string name="nav_sync">Синхрондау</string>
+    <string name="nav_tasks">Міндеттер</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="negative">ЖОЮ</string>
+    <string name="new_notebook">Жаңа блокнот</string>
+    <string name="new_notebook_add">Жаңа блокнот қосылған</string>
+    <string name="new_task">Жаңа міндет</string>
+    <string name="no_notebooks">Блокноттар жоқ</string>
+    <string name="note_ru">Мәтіндік жазба</string>
+    <string name="positive">ОК</string>
+    <string name="pref_notebook_summary_def">таңдалмағаң</string>
+    <string name="pref_notebook_title">Әдепкі жеке блокнот</string>
+    <string name="radio_high">Оте маңызды</string>
+    <string name="radio_low">Кәдімгі</string>
+    <string name="radio_medium">Маңызды</string>
+    <string name="search">Іздеу</string>
+    <string name="settings_activity_title">Настройкалар</string>
+    <string name="task_checkbox_check">Дайын</string>
+    <string name="task_checkbox_uncheck">Міндет аяқталды</string>
+    <string name="task_ru">Міндет</string>
+    <string name="toolbar_all_notebooks">Барлық блокноттар</string>
+    <string name="toolbar_all_notes">Барлық жазбалар</string>
+    <string name="toolbar_all_tasks">Барлық міндеттер</string>
+    <string name="warn_empty_notebook">Бос жазбаны сақтауға болмайды</string>
+</resources>

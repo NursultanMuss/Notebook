@@ -9,7 +9,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="empty_notepad">Нажмите + , чтобы создать заметку, цель или задачу.</string>
+    <string name="empty_notepad">Нажмите + , чтобы создать заметку или задачу.</string>
 
     //Navigation Strings
     <string name="nav_notes">Заметки</string>
@@ -24,6 +24,8 @@
 
     //Toolbar Strings
     <string name="toolbar_all_notes">Все заметки</string>
+    <string name="toolbar_all_tasks">Все задачи</string>
+    <string name="toolbar_all_notebooks">Все блокноты</string>
 
     //Main menu
     <string name="menu_language">Язык</string>
@@ -31,9 +33,10 @@
 
     //Notes
     <string name="new_notebook_add">Добавлен новый блокнот</string>
+    <string name="warn_empty_notebook">Сохранить пустую заметку невозможно</string>
 
     //Settings
-    <string name="activity_title">Настройки</string>
+    <string name="settings_activity_title">Настройки</string>
     <string name="pref_notebook_title">Личный блокнот по умолчанию</string>
     <string name="pref_notebook_summary_def">Не выбран</string>
 
@@ -49,10 +52,23 @@
     //for Dialog
     <string name="negative">ОТМЕНА</string>
     <string name="positive">ОК</string>
-    
+
     //for Task RadioGroup
     <string name="radio_high">Очень важно!</string>
     <string name="radio_medium">Средне важно!</string>
     <string name="radio_low">Обычно</string>
+
+    //for Language Preference
+    <string-array name="lang_entries">
+        <item>Русский</item>
+        <item>Английский</item>
+        <item>Казахский</item>
+    </string-array>
+    <string-array name="lang_entry_values">
+        <item>ru</item>
+        <item>en</item>
+        <item>kk</item>
+    </string-array>
+    <string name="lang_default">Русский</string>
 
 </resources>

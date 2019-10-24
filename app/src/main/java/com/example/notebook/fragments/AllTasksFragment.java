@@ -58,6 +58,7 @@ public class AllTasksFragment extends Fragment {
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();
+        fNoteDataBase.keepSynced(true);
 
 
 
@@ -80,7 +81,7 @@ public class AllTasksFragment extends Fragment {
         if (fAuth.getCurrentUser() != null) {
             FirebaseUserMetadata metadata = fAuth.getCurrentUser().getMetadata();
             if (metadata.getCreationTimestamp() != metadata.getLastSignInTimestamp()) {
-                Query query = fNoteDataBase.child("Tasks").child(fAuth.getCurrentUser().getUid()).orderByChild("timeStamp").limitToLast(15);
+                Query query = fNoteDataBase.child("Tasks").child(fAuth.getCurrentUser().getUid()).orderByChild("priority");
                 Log.d(TAG, "onStart: " + fNoteDataBase.toString());
                 FirebaseRecyclerOptions<Task> options =
                         new FirebaseRecyclerOptions.Builder<Task>()

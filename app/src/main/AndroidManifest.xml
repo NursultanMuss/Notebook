@@ -4,48 +4,54 @@
     package="com.example.notebook">
 
     <application
+        android:name=".Notebook"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChooseNotebookActivity"
-            android:parentActivityName=".SettingsActivity">
+        <activity android:name=".Settings2Activity"
+            android:configChanges="locale"></activity>
+        <activity
+            android:name=".ChooseNotebookActivity"
+            android:parentActivityName=".SettingsActivity"
+            android:configChanges="locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SettingsActivity" />
-
         </activity>
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
-        </activity>
-        <activity android:name=".ChgNoteBookActivity"
-            android:parentActivityName=".MakeNoteActivity">
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ChgNoteBookActivity"
+            android:parentActivityName=".MakeNoteActivity"
+            android:configChanges="locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MakeNoteActivity" />
         </activity>
         <activity
             android:name=".MakeTaskActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:configChanges="locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".MakeNoteActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:configChanges="locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

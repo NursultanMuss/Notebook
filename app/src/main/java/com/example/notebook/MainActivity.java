@@ -2,6 +2,8 @@ package com.example.notebook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -42,10 +44,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     DatabaseReference mDatabase;
     private FirebaseAuth fAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -64,12 +67,21 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab_note, fab_task;
     FloatingActionMenu fab_menu;
 
+    //for SharedPreference
+    public static final String KEY_LANGUAGE_PREF = "language";
+    public static final String ENGLISH_LOCALE = "en";
+    public static final String KAZAKH_LOCALE = "kk";
+    public static final String RUSSIAN_LOCALE = "ru";
+    private Locale locale;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
         fAuth = FirebaseAuth.getInstance();
         fUser=fAuth.getCurrentUser();
         ButterKnife.bind(this);
@@ -105,18 +117,22 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_notes:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new AllNotesFragment()).commit();
+                        toolbar.setTitle(R.string.toolbar_all_notes);
                         break;
                     case R.id.nav_notebooks:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new AllNotebooksFragment()).commit();
+                        toolbar.setTitle(R.string.toolbar_all_notebooks);
                         break;
                     case R.id.nav_tasks:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new AllTasksFragment()).commit();
+                        toolbar.setTitle(R.string.toolbar_all_tasks);
                         break;
                     case R.id.nav_settings:
-                        Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                        Intent intent = new Intent(MainActivity.this,Settings2Activity.class);
                         startActivity(intent);
+                        break;
                     case R.id.nav_log_out:
                         AuthUI.getInstance().signOut(MainActivity.this);
                         break;
@@ -224,5 +240,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//        if (key.equals(KEY_LANGUAGE_PREF)) {
+////            langListPref.setSummary(sharedPreferences.getString(KEY_LANGUAGE_PREF,""));
+//            Resources resources = getResources();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            if (sharedPreferences.getString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE).equals(ENGLISH_LOCALE)) {
+//                locale = new Locale(RUSSIAN_LOCALE);
+//                editor.putString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE);
+//            } else {
+//                locale = new Locale(ENGLISH_LOCALE);
+//                editor.putString(KEY_LANGUAGE_PREF, ENGLISH_LOCALE);
+//            }
+//            if (sharedPreferences.getString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE).equals(KAZAKH_LOCALE)) {
+//                locale = new Locale(RUSSIAN_LOCALE);
+//                editor.putString(KEY_LANGUAGE_PREF, RUSSIAN_LOCALE);
+//            } else {
+//                locale = new Locale(KAZAKH_LOCALE);
+//                editor.putString(KEY_LANGUAGE_PREF, KAZAKH_LOCALE);
+//            }
+//            editor.apply();
+////            Thread langthread = new Thread(new Runnable() {
+////                @Override
+////                public void run() {
+////
+////                }
+////            });
+////            langthread.run();
+//            Configuration configuration = resources.getConfiguration();
+//            configuration.setLocale(locale);
+//            getBaseContext().getResources().updateConfiguration(configuration,
+//                    getBaseContext().getResources().getDisplayMetrics());
+//            recreate();
+//        }
+//    }
 
 }

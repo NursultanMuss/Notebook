@@ -50,8 +50,10 @@ public class AllNotebooksFragment extends Fragment {
         // Firebase initialize
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference();
+        fNoteDataBase.keepSynced(true);
 
         // Firebase initialize
+
 
         //for RecyclerView
         linearLayout = view.findViewById(R.id.ll_empty_notebooks);

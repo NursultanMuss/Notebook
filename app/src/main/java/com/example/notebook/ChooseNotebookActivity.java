@@ -79,6 +79,7 @@ public class ChooseNotebookActivity extends AppCompatActivity implements Dialog.
         fUser = fAuth.getCurrentUser();
         Log.d(TAG, "onCreate: "+ fUser.getDisplayName());
         f_notebook_ref = FirebaseDatabase.getInstance().getReference();
+        f_notebook_ref.keepSynced(true);
 
         dlg1 = new DialogFragment();
 

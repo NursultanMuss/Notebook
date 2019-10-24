@@ -96,6 +96,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         fUser = fAuth.getCurrentUser();
         Log.d(TAG, "onCreate: "+ fUser.getDisplayName());
         f_notebook_ref = FirebaseDatabase.getInstance().getReference();
+        f_notebook_ref.keepSynced(true);
 
         dlg1 = new DialogFragment();
 
@@ -196,7 +197,7 @@ public class ChgNoteBookActivity extends AppCompatActivity implements Dialog.Dia
         Dialog dlg2 = new Dialog();
         dlg2.show(getSupportFragmentManager(), "add notebook dialog");
     }
-
+//Chose notebook method that return result for started activity
     public void onChooseNoteBook(View view) {
         if(!TextUtils.isEmpty(ch_notebook)) {
             Intent intent = new Intent();

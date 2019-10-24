@@ -13,10 +13,13 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"/>
-    <FrameLayout
+    <fragment
+        android:id="@+id/pref_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/pref_fragment_container"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:name="com.example.notebook.SettingsFragment"
+        />
 
 
 

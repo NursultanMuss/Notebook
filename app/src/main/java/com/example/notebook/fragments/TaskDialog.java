@@ -101,6 +101,7 @@ public class TaskDialog extends DialogFragment implements View.OnClickListener, 
         fAuth = FirebaseAuth.getInstance();
         fNoteDataBase = FirebaseDatabase.getInstance().getReference().child("Tasks")
                 .child(fAuth.getCurrentUser().getUid());
+        fNoteDataBase.keepSynced(true);
     }
 
     @Override

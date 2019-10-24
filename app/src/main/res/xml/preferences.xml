@@ -8,5 +8,12 @@
             android:targetPackage="com.example.notebook"
             android:targetClass="com.example.notebook.ChooseNotebookActivity"/>
     </Preference>
+    <ListPreference
+        android:key="language"
+        android:title="@string/menu_language"
+        android:entries="@array/lang_entries"
+        android:entryValues="@array/lang_entry_values"
+        android:summary="@string/lang_default"/>
+
 
 </PreferenceScreen>

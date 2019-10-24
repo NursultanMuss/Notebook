@@ -106,10 +106,12 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
         //SharedPreference - get Default Notebook name
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        notebook_name.setText(pref.getString("NOTEBOOK_PREF",""));
+        notebook_name.setText(pref.getString(SettingsFragment.KEY_NOTEBOOK_PREF,""));
+        Log.d(TAG, "onCreate: " + pref.getString(SettingsFragment.KEY_NOTEBOOK_PREF,""));
         //SharedPreference - get Default Notebook name
         fAuth = FirebaseAuth.getInstance();
         fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Notes").child(fAuth.getCurrentUser().getUid());
+        fNotesDatabase.keepSynced(true);
     putData();
     }
 
@@ -117,8 +119,8 @@ public class  MakeNoteActivity extends AppCompatActivity {
 
     public void clickEditText(final View view){
         Log.d("edit","editted");
-
-//            isClicked=true;
+        if(!isClicked){
+            isClicked=true;
             invalidateOptionsMenu();
 //            invalidateOptionsMenu();
             fab_edit.animate()
@@ -147,7 +149,6 @@ public class  MakeNoteActivity extends AppCompatActivity {
 
                         }
                     });
-        if(!isClicked){
 
         }
             new_note_content.requestFocus();
@@ -304,15 +305,13 @@ public class  MakeNoteActivity extends AppCompatActivity {
         }
         return true;
     }
+    //Method for change menu when fab_edit button clicked or when EditText is clicked
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         ActionBar actionBar = this.getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(!isClicked);
-//        if(isClicked){
-//           actionBar.setHomeAsUpIndicator(R.drawable.ic_action_done);
-//           onBackPressed();
-//        }
+
 
             menu.findItem(R.id.undo).setVisible(isClicked);
             menu.findItem(R.id.redo).setVisible(isClicked);
@@ -322,22 +321,15 @@ public class  MakeNoteActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if(getSupportActionBar()){
-//            clickDone(mMenu.findItem(R.id.done));
-//        }else{
-//            super.onBackPressed();
-//        }
-//
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                if(TextUtils.isEmpty(new_note_title.getText().toString()) || TextUtils.isEmpty(new_note_content.getText().toString())){
+                    Toast.makeText(this, R.string.warn_empty_notebook, Toast.LENGTH_SHORT).show();
+            }
                 break;
             case R.id.done:
                 break;
@@ -352,26 +344,10 @@ public class  MakeNoteActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isExist) {
-            clickEditText(fab_edit);
+       clickEditText(fab_edit);
+        if(new_note_title.requestFocus()|| new_note_content.requestFocus()){
+       clickEditText(fab_edit);
         }
-
-//        if(new_note_title.requestFocus()){
-//            clickEditText(new_note_title);
-//        }
-        //Soft Keyboard visible detect
-
-//        new_note_title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(hasFocus){
-//                    if()
-//                    clickEditText(fab_edit);
-//                }else{
-//
-//                }
-//            }
-//        });
 
     }
 
